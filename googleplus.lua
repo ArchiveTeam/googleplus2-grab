@@ -71,7 +71,13 @@ allowed = function(url, parenturl)
     tested[s] = tested[s] + 1
   end
 
-  if string.match(url, "^https?://[^/]*googleusercontent%.com/") and item_type == "users" then
+  if string.match(url, "^https?://[^/]*googleusercontent%.com/") then
+    if item_type == "communities" then
+      if string.match(url, "w360") then
+        return true
+      end
+      return false
+    end
     if string.match(url, "^https?://[^/]+/[^/]+/[^/]+/[^/]+/[^/]+/w[0-9]+[^/]+/[^/]+$")
         or (queueing_posts and string.match(url, "^https?://[^/]+/[^=]+=w[0-9]+"))
         or (not queueing_posts and string.match(url, "^https?://[^/]+/proxy/[^=]+=w[0-9]+")) then
@@ -259,7 +265,7 @@ wget.callbacks.get_urls = function(file, url, is_css, iri)
       if data[1][3][extension][1][2] ~= nil then
         local post_data = 'f.req=[[[' .. extension .. ',[{"' .. extension .. '":["' .. data[1][3][extension][1][2] .. '","' .. data[1][3][extension][1][8][1][7]['33558957'][17] .. '"]}],null,null,0]]]'
         if item_type == "communities" then
-          post_data = 'f.req=[[[' .. extension .. ',[{"' .. extension .. '":["' .. data[1][3][extension][1][8][1][7]['33558957'][17] .. '",null,"' .. data[1][3][extension][1][2] .. '",null,null,null,null]}],null,null,0]]]'
+          post_data = 'f.req=[[[' .. extension .. ',[{"' .. extension .. '":["' .. data[1][3][extension][2] .. '",null,"' .. data[1][3][extension][1][2] .. '",null,null,null,null]}],null,null,0]]]'
         end
         table.insert(urls, {url=newurl, post_data=post_data})
       end
